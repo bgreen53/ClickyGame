@@ -1,26 +1,85 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from "react";
 import './App.css';
+import ImageCard from "./components/ImageCard";
+import Wrapper from "./components/Wrapper";
+import Title from "./components/Title";
+import images from "./images.json";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      images: images,
+      score: 0,
+      topScore: 0
+
+    }
+  }
+
+    handleClick = id => {
+    let newCard = this.state.images.map(image => {
+      if (id === image.id) {
+        if (image.clicked === undefined) {
+          this.setState({
+            score: this.state.score + 1
+          })
+
+          image.clicked = true;
+          if (this.state.score >= this.state.topScore) {
+            this.setState({
+              topScore: this.state.topScore + 1
+            })
+          }
+        }
+        else {
+          this.setState({
+            score: 0
+          })
+        }
+
+      }
+
+
+      return image;
+    })
+    newCard = newCard.sort(() => (
+      Math.random() - 1
+    ))
+    if (this.state.score === 0) {
+      newCard = newCard.map(image => {
+        image.clicked = undefined
+        return image
+      })
+    }
+
+
+    this.setState({
+      images: newCard
+    })
+  }
+
+  render() {
+    return (
+      <Wrapper>
+        <Title>Clicky Game | Score: {this.state.score} | TopScore: {this.state.topScore} </Title>
+        <div className="row">
+          {this.state.images.map(image => {
+            return (
+
+              <div className="col-sm-3">
+                <ImageCard handleClick={this.handleClick}
+                  image={image.image} id={image.id} />
+              </div>
+            )
+
+          })}
+        </div>
+
+      </Wrapper>
+    )
+  }
+
 }
+
 
 export default App;
