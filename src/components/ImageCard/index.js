@@ -3,6 +3,7 @@ import "./style.css";
 
 function ImageCard(props) {
     return (
+        <div>
         <div className="card"  onClick = {()=> {
             props.handleClick(props.id)
         }}>
@@ -11,6 +12,8 @@ function ImageCard(props) {
             </div>
             
            
+        </div>
+        <br />
         </div>
     );
 }
